@@ -1,69 +1,8 @@
 import {Component} from "react";
+import Input from "../input/input";
+import Btn from "../btn/btn";
+import Counter from "../counter/counter";
 import './app.scss';
-
-
-class Input extends Component {
-
-    constructor(props) {
-        super(props);
-        this.state = {
-            secondsInput: '',
-            isSet: true
-        }
-    }
-
-    showInputValue = (e) => {
-        this.setState({
-            secondsInput: e.target.value
-        })
-        if(e.target.value === ""){
-            this.setState({isSet: true})
-        } else {
-            this.setState({isSet: false})
-        }
-    }
-
-    onSet = () => {
-        this.props.onSetTime(this.state.secondsInput);
-        this.setState({secondsInput: ''});
-        this.setState({isSet: true})
-    }
-
-
-    render() {
-        return (
-            <div className="inputBox">
-                <input type="number"
-                       placeholder="enter time"
-                       onChange={this.showInputValue}
-                       value={this.state.secondsInput}/>
-                <Btn name="SET" onClick={this.onSet} disabled={this.state.isSet}/>
-            </div>
-        )
-    }
-}
-
-
-class Counter extends Component {
-
-
-    render() {
-        const {seconds} = this.props
-        return (
-            <span>{seconds}</span>
-        )
-    }
-}
-
-
-class Btn extends Component {
-    render() {
-        const {name, onClick, disabled} = this.props
-        return (
-            <button onClick={onClick} disabled={disabled}>{name}</button>
-        )
-    }
-}
 
 
 class App extends Component {
@@ -74,7 +13,8 @@ class App extends Component {
             seconds: 60,
             isRunning: false,
             isStop: true,
-            isReset: true
+            isReset: true,
+            // isSetSuccess: false
         }
     }
 
@@ -119,17 +59,32 @@ class App extends Component {
         })
     }
 
+    // handleSetSuccess = () => {
+    //     this.setState({
+    //         isSetSuccess: true
+    //     })
+    // }
+
+
+
 
     render() {
         return (
             <div className="app">
                 <h1>TIMER</h1>
-                <Input onSetTime={this.handleSetTime}/>
+                <Input onSetTime={this.handleSetTime}
+                       onSetSuccess={this.handleSetSuccess}/>
                 <Counter seconds={this.state.seconds}/>
                 <div className="btns">
-                    <Btn name="START" onClick={this.handleStart} disabled={this.state.isRunning}/>
-                    <Btn name="PAUSE" onClick={this.handlePause} disabled={this.state.isStop}/>
-                    <Btn name="RESET" onClick={this.handleReset} disabled={this.state.isReset}/>
+                    <Btn name="START"
+                         onClick={this.handleStart}
+                         disabled={this.state.isRunning /*|| this.state.isSetSuccess*/}/>
+                    <Btn name="PAUSE"
+                         onClick={this.handlePause}
+                         disabled={this.state.isStop}/>
+                    <Btn name="RESET"
+                         onClick={this.handleReset}
+                         disabled={this.state.isReset}/>
                 </div>
             </div>
         )
